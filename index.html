@@ -33,11 +33,13 @@
 				<div {{bindAttr class=":searchResult hasResult:show:hide"}}>
 					{{#if hasResult}}
 						{{#each result in results}}
-							{{result.id}}
+							<h4>Train Name: {{result.name}}</h4>
+							<p> Route: {{result.source}} to {{result.destination}}</p>
+							<br>
 						{{/each}}
-						Im here
 					{{else}}
-						There are no results
+						{{result.error}}
+						No Trains matching these routes found.
 					{{/if}}
 				</div>
 				<div>

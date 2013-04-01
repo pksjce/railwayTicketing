@@ -16,18 +16,18 @@ Ticketing.SearchController = Ember.ObjectController.extend({
 		var dest = this.get('destination');
 		var ticketingModel = Ticketing.TrainInfo.create();
 		this.set("results", ticketingModel.searchTrain(source, dest));
-		var results = this.get('results')
+		var results = this.get('results');
 		if(results.get('error')){
 			this.set('hasResult', false);
 		} else {
 			this.set('hasResult', true);
 		}
-	},
+	}
 });
 
 Ticketing.SearchView = Ember.View.extend({
 	templateName:"search",
-	hasResult:false,
+	hasResult:false
 });
 Ticketing.ResultView = Ember.View.extend({
 	templateName: "result"
@@ -55,7 +55,7 @@ Ticketing.TrainInfo = Ember.Object.extend({
 		if(!source || !destination){
 			return {
 				error:"Please enter sufficient Information to search"
-			}
+			};
 		}
 		var query = encodeURIComponent('where={"source":"' + source + '", "destination": "' + destination +'"}');
 		var getUrl = 'https://api.parse.com/1/classes/TrainObj?' + query;
@@ -75,11 +75,11 @@ Ticketing.TrainInfo = Ember.Object.extend({
 				}
 				result.set('isLoaded', true);
 			} else {
-				result.pushObject({error:"there is no such route"});	
+				result.pushObject({error:"Oops! There is no such route! :("});
 			}
 		});
 		return result;
-	}	
+	}
 });
 
 Ticketing.TrainInfo.data = [
