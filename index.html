@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<style>
+			.hide{
+				display:none;
+			}
+			.show{
+				display:block;
+			}
+		</style>
+		<script src="http://www.parsecdn.com/js/parse-1.2.2.min.js"></script>
+		Railway Ticketing System
+	</head>
+	<body>
+		<div id="mainPage">
+		</div>
+		<script type="text/javascript" src="lib/jquery.js"></script>
+		<script type ="text/javascript" src ="lib/handlebars.js"></script>
+		<script type ="text/javascript" src ="lib/ember.js"></script>
+		<script type ="text/javascript" src ="ticketing.js"></script>
+		<script type="text/x-handlebars">
+			{{outlet}}
+		</script>
+		<script type="text/x-handlebars" id="search">
+			<div id="searchPage">
+				<div class="searchBar">
+					Source:
+					{{view Ember.TextField placeholder="Source" valueBinding="controller.source"}}
+					Destination:
+					{{view Ember.TextField placeholder="Destination" valueBinding="controller.destination"}}
+					<button {{action 'searchTrain'}}> Search </button>
+				</div>
+				<div {{bindAttr class=":searchResult hasResult:show:hide"}}>
+					{{#if hasResult}}
+						{{#each result in results}}
+							{{result.id}}
+						{{/each}}
+						Im here
+					{{else}}
+						There are no results
+					{{/if}}
+				</div>
+				<div>
+					
+				</div>
+			</div>
+		</script>
+		<script type="text/x-handlebars" id="result">
+			<div>
+				{{result.id}}
+			</div>
+		</script>
+	</body>
+</html>
