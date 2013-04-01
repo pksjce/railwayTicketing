@@ -39,12 +39,16 @@
 							{{else}}
 								<h4>Train Name: {{result.name}}</h4>
 								<p> Route: {{result.source}} to {{result.destination}}</p>
+								{{#linkTo 'book' result.id}} Book Tickets {{/linkTo}}
 								<br>
 							{{/if}}
 						{{/each}}
 					{{/if}}
 				</div>
 			</div>
+		</script>
+		<script type="text/x-handlebars" id="book">
+			{{name}} {{source}} {{destination}}
 		</script>
 		<script type="text/x-handlebars" id="result">
 			<div>

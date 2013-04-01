@@ -4,6 +4,7 @@ Ticketing = Ember.Application.create({
 
 Ticketing.Router.map(function(){
 	this.route('search', {path: '/'});
+	this.route('book', {path: '/book/:id'});
 });
 
 Ticketing.SearchController = Ember.ObjectController.extend({
@@ -22,6 +23,12 @@ Ticketing.SearchController = Ember.ObjectController.extend({
 		} else {
 			this.set('hasResult', true);
 		}
+	}
+});
+
+Ticketing.BookRoute = Ember.Route.extend({
+	setupController: function(controller, model){
+		console.log(controller, model);
 	}
 });
 
