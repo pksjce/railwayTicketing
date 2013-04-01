@@ -75,7 +75,7 @@ Ticketing.TrainInfo = Ember.Object.extend({
 				}
 				result.set('isLoaded', true);
 			} else {
-				result.pushObject({error:"Oops! There is no such route! :("});
+				result.pushObject({error:"Oops! No Trains matching these routes found. :("});
 			}
 		});
 		return result;
