@@ -28,16 +28,59 @@ Ticketing.SearchController = Ember.ObjectController.extend({
 
 Ticketing.BookRoute = Ember.Route.extend({
 	setupController: function(controller, model){
-		console.log(controller, model);
+		if(typeof model === 'object'){
+			model = model.id;
+		}
+		Ticketing.TrainDetail.find(model);
+		//var trainDates = Ticketing.TrainDetail.create();
+		/*this.set('results', Ticketing.TrainDetail.find(model));
+		var results = this.get('results');
+		console.log(results);*/
 	}
 });
+
+/*Ticketing.BookController = Ember.ObjectController.extend({
+
+});*/
 
 Ticketing.SearchView = Ember.View.extend({
 	templateName:"search",
 	hasResult:false
 });
-Ticketing.ResultView = Ember.View.extend({
-	templateName: "result"
+Ticketing.BookView = Ember.View.extend({
+	templateName: "book",
+	isLoaded: false
+});
+
+Ticketing.TrainDetail = Ember.Object.extend({});
+
+Ticketing.TrainDetail.reopenClass({
+	find: function(id){
+		Parse.initialize("PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1", "Qsel3hgjZWN38i4nPJYuwPkfhKsYvbxSqJ44GmKs");
+		var result = Ember.ArrayProxy.create({content:[], isLoaded:false});
+		var query = encodeURIComponent('where={"trainId":' + id + '}');
+		var getUrl = 'https://api.parse.com/1/classes/TrainData?' + query;
+		$.ajax({
+			url:getUrl,
+			contentType:'application/json',
+			type:'GET',
+			headers:{
+				'X-Parse-Application-Id': 'PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1',
+				"X-Parse-REST-API-Key": "xO7JIwnTjsM2eUkPUliLibWsSphE5PVruCvrCM91"
+			}
+		}).done(function(response){
+			var data = response.results;
+			if(data.length > 0){
+				for(var i=0;i< data.length;i++){
+					result.pushObject(Ticketing.TrainDetail.create(data[i]));
+				}
+				result.set('isLoaded', true);
+			} else {
+				result.pushObject({error:"Oops! No Trains matching these routes found. :("});
+			}
+			return result;
+		});
+	}
 });
 
 Ticketing.TrainInfo = Ember.Object.extend({
