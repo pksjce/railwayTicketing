@@ -12,7 +12,6 @@
 		<title>Railway Ticketing System</title>
 	</head>
 	<body>
-		<h3>Railway Ticketing System</h3>
 		<div id="mainPage">
 		</div>
 		<script type="text/javascript" src="lib/jquery.js"></script>
@@ -39,7 +38,7 @@
 							{{else}}
 								<h4>Train Name: {{result.name}}</h4>
 								<p> Route: {{result.source}} to {{result.destination}}</p>
-								{{#linkTo 'book' result.trainId}} Book Tickets {{/linkTo}}
+								{{#linkTo 'bookings' result.trainId}} Book Tickets {{/linkTo}}
 								<br>
 							{{/if}}
 						{{/each}}
@@ -47,10 +46,45 @@
 				</div>
 			</div>
 		</script>
-		<script type="text/x-handlebars" id="book">
-			{{#each result in results}}
-				{{result.classASeats}} {{result.classBSeats}} {{result.classCSeats}}
+		<script type="text/x-handlebars" id="bookings">
+			<table>
+				<tr>
+					<th>
+						Train Name
+					</th>
+					<th>
+						Date
+					</th>
+					<th>
+						Class 'A' availability
+					</th>
+					<th>
+						Class 'B' availability
+					</th>
+					<th>
+						Class 'C' availability
+					</th>
+				</tr>
+			{{#each result in model.trainDetails}}
+				<tr>
+					<td>
+						{{result.trainId}}
+					</td>
+					<td>
+						{{result.bookingDate}}
+					</td>
+					<td>
+						{{result.classASeats}}
+					</td>
+					<td>
+						{{result.classBSeats}}
+					</td>
+					<td>
+						{{result.classCSeats}}
+					</td>
+				</tr>
 			{{/each}}
+			</table>
 		</script>
 		<script type="text/x-handlebars" id="result">
 			<div>
