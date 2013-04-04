@@ -5,7 +5,6 @@ Ticketing = Ember.Application.create({
 Ticketing.Router.map(function(){
 	this.route('bookings', {path: '/bookings/:id'});
 	this.route('search', {path: '/'});
-	
 });
 
 Ticketing.SearchController = Ember.ObjectController.extend({
@@ -16,14 +15,26 @@ Ticketing.SearchController = Ember.ObjectController.extend({
 	searchTrain: function(){
 		var source = this.get('source');
 		var dest = this.get('destination');
-		var ticketingModel = Ticketing.TrainInfo.create();
-		this.set("results", ticketingModel.searchTrain(source, dest));
-		var results = this.get('results');
-		if(results.get('error')){
-			this.set('hasResult', false);
-		} else {
-			this.set('hasResult', true);
-		}
+		var self = this;
+		Ticketing.TrainInfo.searchTrain(source, dest).then(function(response){
+			var result = Ember.ArrayProxy.create({content:[], isLoaded:false});
+			var data = response.results;
+			if(data.length >0){
+				for(var i=0;i< data.length;i++){
+					result.pushObject(Ticketing.TrainInfo.create(data[i]));
+				}
+				result.set('isLoaded', true);
+			} else {
+				result.pushObject({error:"Oops! No Trains matching these routes found. :("});
+			}
+			self.set('results', result);
+			var results = self.get('results');
+			if(results.get('error')){
+				self.set('hasResult', false);
+			} else {
+				self.set('hasResult', true);
+			}
+		});
 	}
 });
 
@@ -49,12 +60,7 @@ Ticketing.BookingsRoute = Ember.Route.extend({
 				trainDetails.pushObject({error:"Oops! No Trains matching these routes found. :("});
 			}
 			controller.set('content', {'trainDetails': trainDetails});
-			console.log(model);
 		});
-		//var trainDates = Ticketing.TrainDetail.create();
-		/*this.set('results', Ticketing.TrainDetail.find(model));
-		var results = this.get('results');
-		console.log(results);*/
 	}
 });
 
@@ -68,7 +74,7 @@ Ticketing.SearchView = Ember.View.extend({
 	hasResult:false
 });
 Ticketing.BookingsView = Ember.View.extend({
-	templateName: "bookings",
+	templateName: "bookings"
 });
 
 Ticketing.BookTicketView = Ember.View.extend({
@@ -86,14 +92,14 @@ Ticketing.BookTicketView = Ember.View.extend({
 				noOfTickets: noOfTickets,
 				userName:userName,
 				mobile: mobile
-			}
+			};
 			Ticketing.BookingDetails.saveBooking(bookingDetails);
 			Ticketing.TrainDetail.updateAvailability(this.get('available') -1);
 			this.set('toBook', false);
 		}
-		
 	},
 	showBooking: function(){
+		console.log(this.get('temp'));
 		this.set('toBook', true);
 	}
 });
@@ -105,7 +111,7 @@ Ticketing.BookingDetails = Ember.Object.extend({
 Ticketing.BookingDetails.reopenClass({
 	saveBooking: function(bookingDetails){
 		console.log("I will save " + bookingDetails);
-	},
+	}
 });
 
 Ticketing.TrainDetail = Ember.Object.extend({
@@ -144,6 +150,9 @@ Ticketing.TrainDetail.reopenClass({
 });
 
 Ticketing.TrainInfo = Ember.Object.extend({
+});
+
+Ticketing.TrainInfo.reopenClass({
 	searchTrain: function(source, destination){
 		Parse.initialize("PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1", "Qsel3hgjZWN38i4nPJYuwPkfhKsYvbxSqJ44GmKs");
 /*		var data = Ticketing.TrainInfo.data;
@@ -161,7 +170,6 @@ Ticketing.TrainInfo = Ember.Object.extend({
 			alert(msg);
 		});
 	}*/
-		var result = Ember.ArrayProxy.create({content:[], isLoaded:false});
 		if(!source || !destination){
 			return {
 				error:"Please enter sufficient Information to search"
@@ -169,7 +177,7 @@ Ticketing.TrainInfo = Ember.Object.extend({
 		}
 		var query = encodeURIComponent('where={"source":"' + source + '", "destination": "' + destination +'"}');
 		var getUrl = 'https://api.parse.com/1/classes/TrainObj?' + query;
-		$.ajax({
+		return $.ajax({
 			url:getUrl,
 			contentType:'application/json',
 			type:'GET',
@@ -177,18 +185,7 @@ Ticketing.TrainInfo = Ember.Object.extend({
 				'X-Parse-Application-Id': 'PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1',
 				"X-Parse-REST-API-Key": "xO7JIwnTjsM2eUkPUliLibWsSphE5PVruCvrCM91"
 			}
-		}).done(function(response){
-			var data = response.results;
-			if(data.length >0){
-				for(var i=0;i< data.length;i++){
-					result.pushObject(Ticketing.TrainInfo.create(data[i]));
-				}
-				result.set('isLoaded', true);
-			} else {
-				result.pushObject({error:"Oops! No Trains matching these routes found. :("});
-			}
 		});
-		return result;
 	}
 });
 
