@@ -1,33 +1,37 @@
-header {
-	height: 50px;
-	background-color: gray;
-	opacity: 0.2;
+.boxWrap { /* The div that shows/hides. */
+    z-index:40001; /* High z-index to ensure it appears above all content */
+    position:absolute;
+    top:0;
+    left:0;
+    height:100%;
+    width:100%;
 }
-
-input[type="text"] {
-	height: 30px;
-	vertical-align: top;
+.boxOverlay { /* Shades out background when selector is active */
+   position:relative;
+   top:0;
+   left:0;
+   height:100%;
+   width:100%;
+    background-color:black;
+    opacity:0.8; /* Sets opacity so it's partly transparent */
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; /* IE transparency */
+    filter:alpha(opacity=50); /* More IE transparency */
+    z-index:40001;
 }
-
-.span12 {
-	margin-top: 20px;
+.vertical-offset1 { /* Fixed position to provide the vertical offset */
+    position:relative;
+    top:30%;
+    width:100%;
+    z-index:40002; /* ensures box appears above overlay */
 }
-
-.img-polaroid {
-	-webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    padding: 7px;
-    margin-bottom: 10px;
-}
-
-.title {
-	position: fixed;
-	top: 0px;
-	left: 5px;
-	z-index: 2000;
-}
-
-.bodyArea {
-	margin-top: 50px;
+.myBox { /* The actual box, centered in the fixed-position div */
+    width:405px; /* Whatever width you want the box to be */
+    position:absolute;
+    z-index:40002;
+    top:30%;
+    left:40%;
+    margin:0 auto;
+    background-color:white;
+    padding:10px;
+    border:1px solid white;
 }

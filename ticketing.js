@@ -91,6 +91,7 @@ Ticketing.SearchView = Ember.View.extend({
 	templateName:"search",
 	hasResult:false
 });
+
 Ticketing.BookingsView = Ember.View.extend({
 	templateName: "bookings",
 	showChildOnly: function(childId){
@@ -146,15 +147,18 @@ Ticketing.BookTicketView = Ember.View.extend({
 			});
 			
 			this.set('toBook', false);
-			var parent = this.get('parentView');
-			parent.get('parentView').showAll();
+/*			var parent = this.get('parentView');
+			parent.get('parentView').showAll();*/
 		}
 	},
 	showBooking: function(){
 		console.log(this.get('temp'));
 		this.set('toBook', true);
-		var parent = this.get('parentView');
-		parent.get('parentView').showChildOnly(parent.get('elementId'));
+		/*var parent = this.get('parentView');
+		parent.get('parentView').showChildOnly(parent.get('elementId'));*/
+	},
+	cancel: function(){
+		this.set('toBook', false);
 	}
 });
 
@@ -240,55 +244,3 @@ Ticketing.TrainInfo.reopenClass({
 		});
 	}
 });
-
-Ticketing.TrainInfo.data = [
-	{
-		id:1,
-		source:'Bangalore',
-		destination:'Mysore',
-		trainId:001,
-		name:"Tuticorin"
-	},
-	{
-		id:1,
-		source:'Bangalore',
-		destination:'Mysore',
-		trainId:001,
-		name:"Tuticorin"
-	},
-	{
-		id:2,
-		source:'Bangalore',
-		destination:'Mysore',
-		trainId:010,
-		name:"Express"
-	},
-	{
-		id:3,
-		source:'Bangalore',
-		destination:'Mysore',
-		trainId:011,
-		name:"Passenger"
-	},
-	{
-		id:4,
-		source:'Bangalore',
-		destination:'Chennai',
-		trainId:029,
-		name:"Shatabdi"
-	},
-	{
-		id:5,
-		source:'Bangalore',
-		destination:'Pune',
-		trainId:023,
-		name:"Express"
-	},
-	{
-		id:6,
-		source:'Bangalore',
-		destination:'Mysore',
-		trainId:041,
-		name:"Shatabdi"
-	}
-	]

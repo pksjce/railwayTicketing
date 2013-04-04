@@ -62,13 +62,7 @@
 						Date
 					</th>
 					<th>
-						Class 'A' availability
-					</th>
-					<th>
-						Class 'B' availability
-					</th>
-					<th>
-						Class 'C' availability
+						Seat Availability
 					</th>
 				</tr>
 			{{#each result in model.trainDetails}}
@@ -86,27 +80,45 @@
 					</td>
 					<td>
 						{{view Ticketing.BookTicketView availableBinding="result.classASeats" type="A" trainBinding="result"}}
-					</td>
-					<td>
+					
+					
 						{{view Ticketing.BookTicketView availableBinding="result.classBSeats" type="B" trainBinding="result"}}
-					</td>
-					<td>
+					
+					
 						{{view Ticketing.BookTicketView availableBinding="result.classCSeats" type="C" trainBinding="result"}}
 					</td>
 				</tr>		
 		</script>
 		<script type="text/x-handlebars" id="bookTicket">
 			{{#if view.toBook}}
-				No of tickets:
-				{{view Ember.TextField placeholder="How many?" valueBinding="view.noOfTickets"}}
-				Your name:
-				{{view Ember.TextField placeholder="Name" valueBinding="view.userName"}}
-				Your mobile number:
-				{{view Ember.TextField placeholder="Mobile" valueBinding="view.mobile"}}
-				<button {{action "bookNow" target="view"}}>Book Now </button>
+				<div class="boxWrap">
+    				<div class="boxOverlay">
+        				&nbsp;
+    				</div>
+    				<div class="vertical-offset">
+        				<div class="myBox">
+        					Train No {{view.train.trainId}} - Class {{view.type}} Seats for {{view.train.bookingDate}}
+        					<br>
+        					<br>
+            				No of tickets:
+							{{view Ember.TextField placeholder="How many?" valueBinding="view.noOfTickets"}}
+							<br>
+							Your name:
+							{{view Ember.TextField placeholder="Name" valueBinding="view.userName"}}
+							<br>
+							Your mobile number:
+							{{view Ember.TextField placeholder="Mobile" valueBinding="view.mobile"}}
+							<br>
+							<button {{action "bookNow" target="view"}}>Book Now </button>
+							<button {{action "cancel" target="view"}}>Cancel</button>
+        				</div>
+    				</div>
+				</div>
+				
 			{{else}}
-				<div> Available : {{view.available}} </div>
-				<button {{action "showBooking" target="view"}}> Wanna book?</button>
+				<div> Class{{view.type}} : {{view.available}}  
+					<button {{action "showBooking" target="view"}}> Wanna book?</button>
+				</div>
 			{{/if}}
 		</script>
 		<script type="text/x-handlebars" id="result">
