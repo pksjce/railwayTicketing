@@ -143,13 +143,16 @@ Ticketing.BookTicketView = Ember.View.extend({
 				var type = self.get('type');
 				var newAvailable = self.get('available') -noOfTickets;
 				self.get('train').set('class'+type+'Seats', newAvailable);
-				
+				self.set('bookingSuccess', true);
+				self.set('bookingId', response.objectId);
 			});
 			
-			this.set('toBook', false);
 /*			var parent = this.get('parentView');
 			parent.get('parentView').showAll();*/
 		}
+	},
+	responseDone: function(){
+		this.set('toBook', false);
 	},
 	showBooking: function(){
 		console.log(this.get('temp'));

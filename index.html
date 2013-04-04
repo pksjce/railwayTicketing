@@ -97,20 +97,25 @@
     				</div>
     				<div class="vertical-offset">
         				<div class="myBox">
-        					Train No {{view.train.trainId}} - Class {{view.type}} Seats for {{view.train.bookingDate}}
-        					<br>
-        					<br>
-            				No of tickets:
-							{{view Ember.TextField placeholder="How many?" valueBinding="view.noOfTickets"}}
-							<br>
-							Your name:
-							{{view Ember.TextField placeholder="Name" valueBinding="view.userName"}}
-							<br>
-							Your mobile number:
-							{{view Ember.TextField placeholder="Mobile" valueBinding="view.mobile"}}
-							<br>
-							<button {{action "bookNow" target="view"}}>Book Now </button>
-							<button {{action "cancel" target="view"}}>Cancel</button>
+	        				{{#if view.bookingSuccess}}
+	        					Your booking was successful. Here is your booking id {{view.bookingId}}
+	        					<button {{action "responseDone" target="view"}}>Great! </button>
+	        				{{else}}	
+	        					Train No {{view.train.trainId}} - Class {{view.type}} Seats for {{view.train.bookingDate}}
+	        					<br>
+	        					<br>
+	            				No of tickets:
+								{{view Ember.TextField placeholder="How many?" valueBinding="view.noOfTickets"}}
+								<br>
+								Your name:
+								{{view Ember.TextField placeholder="Name" valueBinding="view.userName"}}
+								<br>
+								Your mobile number:
+								{{view Ember.TextField placeholder="Mobile" valueBinding="view.mobile"}}
+								<br>
+								<button {{action "bookNow" target="view"}}>Book Now </button>
+								<button {{action "cancel" target="view"}}>Cancel</button>
+							{{/if}}
         				</div>
     				</div>
 				</div>
