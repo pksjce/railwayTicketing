@@ -53,22 +53,24 @@
 			</div>
 		</script>
 		<script type="text/x-handlebars" id="bookings">
-			<table>
-				<tr>
-					<th>
-						Train Name
-					</th>
-					<th>
-						Date
-					</th>
-					<th>
-						Seat Availability
-					</th>
-				</tr>
-			{{#each result in model.trainDetails}}
-				{{view Ticketing.PerTrainView resultBinding="result"}}
-			{{/each}}
-			</table>
+			<div class="trainList">
+				<table>
+					<tr>
+						<th>
+							Train Name
+						</th>
+						<th>
+							Date
+						</th>
+						<th>
+							Seat Availability
+						</th>
+					</tr>
+				{{#each result in model.trainDetails}}
+					{{view Ticketing.PerTrainView resultBinding="result"}}
+				{{/each}}
+				</table>
+			</div>
 		</script>
 		<script type="text/x-handlebars" id="perTrain">
 				<tr>
@@ -115,11 +117,11 @@
 								<br>
 								<button {{action "bookNow" target="view"}}>Book Now </button>
 								<button {{action "cancel" target="view"}}>Cancel</button>
+								<div style="color:red">{{view.errorMsg}}</div>
 							{{/if}}
         				</div>
     				</div>
 				</div>
-				
 			{{else}}
 				<div> Class{{view.type}} : {{view.available}}  
 					<button {{action "showBooking" target="view"}}> Wanna book?</button>

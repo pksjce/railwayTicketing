@@ -126,7 +126,7 @@ Ticketing.BookTicketView = Ember.View.extend({
 		var trainDetails = this.get('train');
 		var objectId = trainDetails.get('objectId');
 		if(!noOfTickets || !userName || !mobile){
-			alert("Please give all details");
+			this.set('errorMsg', 'Please enter all the above data for successful booking');
 
 		} else{
 			var bookingDetails = {
