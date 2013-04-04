@@ -1,0 +1,33 @@
+header {
+	height: 50px;
+	background-color: gray;
+	opacity: 0.2;
+}
+
+input[type="text"] {
+	height: 30px;
+	vertical-align: top;
+}
+
+.span12 {
+	margin-top: 20px;
+}
+
+.img-polaroid {
+	-webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    padding: 7px;
+    margin-bottom: 10px;
+}
+
+.title {
+	position: fixed;
+	top: 0px;
+	left: 5px;
+	z-index: 2000;
+}
+
+.bodyArea {
+	margin-top: 50px;
+}
