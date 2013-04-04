@@ -84,6 +84,8 @@ Ticketing.BookTicketView = Ember.View.extend({
 		var noOfTickets = this.get('noOfTickets');
 		var userName = this.get('userName');
 		var mobile = this.get('mobile');
+		var trainDetails = this.get('train');
+		var objectId = trainDetails.get('objectId');
 		if(!noOfTickets || !userName || !mobile){
 			alert("Please give all details");
 
@@ -91,10 +93,23 @@ Ticketing.BookTicketView = Ember.View.extend({
 			var bookingDetails = {
 				noOfTickets: noOfTickets,
 				userName:userName,
-				mobile: mobile
+				mobile: mobile,
+				trainId: objectId,
+				type:this.get('type')
 			};
-			Ticketing.BookingDetails.saveBooking(bookingDetails);
-			Ticketing.TrainDetail.updateAvailability(this.get('available') -1);
+			var self = this;
+			var updatedObj = Ticketing.BookingDetails.saveBooking(bookingDetails)
+			.then(function(response){
+				var that = self;
+				var type = self.get('type');
+				var newAvailable = self.get('available') -noOfTickets;
+				Ticketing.TrainDetail.updateAvailability(newAvailable, type , objectId)
+				.then(function(response){
+					var key = 'class'+type+'Seats';
+					//that.get('parentView').set(key, newAvailable);
+				});
+			});
+			
 			this.set('toBook', false);
 		}
 	},
@@ -111,6 +126,16 @@ Ticketing.BookingDetails = Ember.Object.extend({
 Ticketing.BookingDetails.reopenClass({
 	saveBooking: function(bookingDetails){
 		console.log("I will save " + bookingDetails);
+		return $.ajax({
+			url:"https://api.parse.com/1/classes/BookingDetails",
+			contentType:'application/json',
+			type:'POST',
+			headers:{
+				'X-Parse-Application-Id': 'PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1',
+				"X-Parse-REST-API-Key": "xO7JIwnTjsM2eUkPUliLibWsSphE5PVruCvrCM91"
+			},
+			data: JSON.stringify(bookingDetails)
+		});
 	}
 });
 
@@ -119,8 +144,22 @@ Ticketing.TrainDetail = Ember.Object.extend({
 });
 
 Ticketing.TrainDetail.reopenClass({
-	updateAvailability: function(availability){
+	updateAvailability: function(availability, type, objectId){
 		console.log('I will update availability' +  availability);
+		var key = 'class'+type+'Seats';
+		var data = {};
+		data[key] = availability;
+		return $.ajax({
+			url:"https://api.parse.com/1/classes/TrainData/" + objectId ,
+			contentType:'application/json',
+			type:'PUT',
+			headers:{
+				'X-Parse-Application-Id': 'PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1',
+				"X-Parse-REST-API-Key": "xO7JIwnTjsM2eUkPUliLibWsSphE5PVruCvrCM91"
+			},
+			data: JSON.stringify(data)
+		});
+
 	},
 	find: function(id){
 		Parse.initialize("PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1", "Qsel3hgjZWN38i4nPJYuwPkfhKsYvbxSqJ44GmKs");

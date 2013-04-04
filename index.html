@@ -74,13 +74,13 @@
 						{{result.bookingDate}}
 					</td>
 					<td>
-						{{view Ticketing.BookTicketView availableBinding="result.classASeats" type="A"}}
+						{{view Ticketing.BookTicketView availableBinding="result.classASeats" type="A" trainBinding="result"}}
 					</td>
 					<td>
-						{{view Ticketing.BookTicketView availableBinding="result.classBSeats" type="B"}}
+						{{view Ticketing.BookTicketView availableBinding="result.classBSeats" type="B" trainBinding="result"}}
 					</td>
 					<td>
-						{{view Ticketing.BookTicketView availableBinding="result.classCSeats" type="C"}}
+						{{view Ticketing.BookTicketView availableBinding="result.classCSeats" type="C" trainBinding="result"}}
 					</td>
 				</tr>
 			{{/each}}
