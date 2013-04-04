@@ -25,7 +25,7 @@ Ticketing.SearchController = Ember.ObjectController.extend({
 				}
 				result.set('isLoaded', true);
 			} else {
-				result.pushObject({error:"Oops! No Trains matching these routes found. :("});
+				result.pushObject({error:"No Trains travelling from " + source +" to "+ dest+" found. :("});
 			}
 			self.set('results', result);
 			var results = self.get('results');

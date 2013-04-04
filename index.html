@@ -9,38 +9,43 @@
 			}
 		</style>
 		<script src="http://www.parsecdn.com/js/parse-1.2.2.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="ticketing.css">
 		<title>Railway Ticketing System</title>
 	</head>
 	<body>
-		<div id="mainPage">
+		<header class="navbar-fixed-top">
+		</header>
+		<h2 class="title"><img src="train.png"> Railway Ticketing System</h2>
+		<div id="mainPage" class="container bodyArea">
 		</div>
-		<script type="text/javascript" src="lib/jquery.js"></script>
-		<script type ="text/javascript" src ="lib/handlebars.js"></script>
-		<script type ="text/javascript" src ="lib/swag.min.js"></script>
-		<script type ="text/javascript" src ="lib/ember.js"></script>
-		<script type ="text/javascript" src ="ticketing.js"></script>
 		<script type="text/x-handlebars">
 			{{outlet}}
 		</script>
 		<script type="text/x-handlebars" id="search">
-			<div id="searchPage">
-				<div class="searchBar">
+			<div id="searchPage row">
+				<div class="searchBar span12">
 					Source:
 					{{view Ember.TextField placeholder="Source" valueBinding="controller.source"}}
 					Destination:
 					{{view Ember.TextField placeholder="Destination" valueBinding="controller.destination"}}
-					<button {{action 'searchTrain'}}> Search </button>
+					<button {{action 'searchTrain'}} class="btn btn-primary"><i class="icon-search icon-white"></i> Search </button>
 				</div>
-				<div {{bindAttr class=":searchResult hasResult:show:hide"}}>
+				<div {{bindAttr class=":searchResult hasResult:show:hide span12"}}>
 					{{#if hasResult}}
 						{{#each result in results}}
 							{{#if result.error}}
-								<p>{{result.error}}</p>
+							<div class="span11 alert alert-error">
+				              <button type="button" class="close" data-dismiss="alert">&times;</button>
+				              <strong>Oops!</strong> {{result.error}}
+				            </div>
 							{{else}}
-								<h4>Train Name: {{result.name}}</h4>
-								<p> Route: {{result.source}} to {{result.destination}}</p>
-								{{#linkTo 'bookings' result.trainId}} Book Tickets {{/linkTo}}
-								<br>
+							<div class="span11 img-polaroid">
+							{{#linkTo 'bookings' result.trainId class="pull-right"}}<i class="icon-bookmark"></i> Book Tickets {{/linkTo}}
+								<h5><strong>Train Name:</strong> {{result.name}}</h5>
+								<p><strong>Route:</strong> {{result.source}} <i class="icon-chevron-right"></i> {{result.destination}}</p>
+							</div>
+							<br>
 							{{/if}}
 						{{/each}}
 					{{/if}}
@@ -109,5 +114,11 @@
 				{{result.id}}
 			</div>
 		</script>
+		<script type="text/javascript" src="lib/jquery.js"></script>
+		<script type="text/javascript" src="lib/bootstrap/js/bootstrap.min.js"></script>
+		<script type ="text/javascript" src ="lib/handlebars.js"></script>
+		<script type ="text/javascript" src ="lib/swag.min.js"></script>
+		<script type ="text/javascript" src ="lib/ember.js"></script>
+		<script type ="text/javascript" src ="ticketing.js"></script>
 	</body>
 </html>
