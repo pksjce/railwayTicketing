@@ -67,6 +67,11 @@
 					</th>
 				</tr>
 			{{#each result in model.trainDetails}}
+				{{view Ticketing.PerTrainView resultBinding="result"}}
+			{{/each}}
+			</table>
+		</script>
+		<script type="text/x-handlebars" id="perTrain">
 				<tr>
 					<td>
 						{{result.trainId}}
@@ -83,9 +88,7 @@
 					<td>
 						{{view Ticketing.BookTicketView availableBinding="result.classCSeats" type="C" trainBinding="result"}}
 					</td>
-				</tr>
-			{{/each}}
-			</table>
+				</tr>		
 		</script>
 		<script type="text/x-handlebars" id="bookTicket">
 			{{#if view.toBook}}

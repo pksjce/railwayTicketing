@@ -38,16 +38,11 @@ Ticketing.SearchController = Ember.ObjectController.extend({
 	}
 });
 
-Ticketing.BookingsController = Ember.Controller.extend();
-
-Ticketing.BookingsRoute = Ember.Route.extend({
-	setupController: function(controller, model){
-		console.log(model);
-		if(typeof model === 'object'){
-			model = model.id;
-		}
-		var self = this;
-		Ticketing.TrainDetail.find(model).then(function(response){
+Ticketing.BookingsController = Ember.Controller.extend({
+	bookingDone:false,
+	updateModel:function(id){
+		var that = this;
+		Ticketing.TrainDetail.find(id).then(function(response){
 			var trainDetails = Ember.ArrayProxy.create({content:[], isLoaded:false});
 			model = trainDetails;
 			var data = response.results;
@@ -55,27 +50,70 @@ Ticketing.BookingsRoute = Ember.Route.extend({
 				for(var i=0;i< data.length;i++){
 					trainDetails.pushObject(Ticketing.TrainDetail.create(data[i]));
 				}
+				trainDetails.every(function(trainDetail, index, self){
+					trainDetail.addObserver('classASeats', function(){
+						return that.updateAvailability(this, 'classASeats');
+					});
+					trainDetail.addObserver('classBSeats', function(){
+						return that.updateAvailability(this, 'classBSeats');
+					});
+					trainDetail.addObserver('classCSeats', function(){
+						return that.updateAvailability(this, 'classCSeats');
+					});
+				})
 				trainDetails.set('isLoaded', true);
 			} else {
 				trainDetails.pushObject({error:"Oops! No Trains matching these routes found. :("});
 			}
-			controller.set('content', {'trainDetails': trainDetails});
+			that.set('content', {'trainDetails': trainDetails});
 		});
+	},
+	updateAvailability: function(object, type){
+		var self = this;
+		Ticketing.TrainDetail.updateAvailability(object, type)
+			.then(function(){
+				self.set('bookingDone', true)
+			});
 	}
 });
 
-
-/*Ticketing.BookController = Ember.ObjectController.extend({
-
-});*/
+Ticketing.BookingsRoute = Ember.Route.extend({
+	setupController: function(controller, model){
+		console.log(model);
+		if(typeof model === 'object'){
+			model = model.id;
+		}
+		controller.updateModel(model);
+	},
+});
 
 Ticketing.SearchView = Ember.View.extend({
 	templateName:"search",
 	hasResult:false
 });
 Ticketing.BookingsView = Ember.View.extend({
-	templateName: "bookings"
+	templateName: "bookings",
+	showChildOnly: function(childId){
+		this.get('childViews').forEach(function(item, index){
+			var elementId = item.get('elementId');
+			if(elementId != childId){
+				$('#' + elementId).next().css('display', 'none');
+			}
+		})
+	},
+	showAll: function(){
+		this.get('childViews').every(function(child, index, self){
+			var elementId = child.get('elementId');
+			$('#' + elementId).next().css('display', '');
+		});
+	}
+
 });
+
+Ticketing.PerTrainView = Ember.View.extend({
+	templateName: "perTrain",
+
+})
 
 Ticketing.BookTicketView = Ember.View.extend({
 	templateName:"bookTicket",
@@ -103,18 +141,20 @@ Ticketing.BookTicketView = Ember.View.extend({
 				var that = self;
 				var type = self.get('type');
 				var newAvailable = self.get('available') -noOfTickets;
-				Ticketing.TrainDetail.updateAvailability(newAvailable, type , objectId)
-				.then(function(response){
-					var key = 'class'+type+'Seats';
-					//that.get('parentView').set(key, newAvailable);
-				});
+				self.get('train').set('class'+type+'Seats', newAvailable);
+				
 			});
 			
 			this.set('toBook', false);
+			var parent = this.get('parentView');
+			parent.get('parentView').showAll();
 		}
 	},
 	showBooking: function(){
+		console.log(this.get('temp'));
 		this.set('toBook', true);
+		var parent = this.get('parentView');
+		parent.get('parentView').showChildOnly(parent.get('elementId'));
 	}
 });
 
@@ -143,13 +183,13 @@ Ticketing.TrainDetail = Ember.Object.extend({
 });
 
 Ticketing.TrainDetail.reopenClass({
-	updateAvailability: function(availability, type, objectId){
-		console.log('I will update availability' +  availability);
-		var key = 'class'+type+'Seats';
+	updateAvailability: function(obj, type){
+		console.log('I will update availability' +  obj.get(type));
+		
 		var data = {};
-		data[key] = availability;
+		data[type] = obj.get(type);
 		return $.ajax({
-			url:"https://api.parse.com/1/classes/TrainData/" + objectId ,
+			url:"https://api.parse.com/1/classes/TrainData/" + obj.get('objectId') ,
 			contentType:'application/json',
 			type:'PUT',
 			headers:{
@@ -172,18 +212,7 @@ Ticketing.TrainDetail.reopenClass({
 				'X-Parse-Application-Id': 'PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1',
 				"X-Parse-REST-API-Key": "xO7JIwnTjsM2eUkPUliLibWsSphE5PVruCvrCM91"
 			}
-		})/*.done(function(response){
-			var data = response.results;
-			if(data.length > 0){
-				for(var i=0;i< data.length;i++){
-					result.pushObject(Ticketing.TrainDetail.create(data[i]));
-				}
-				result.set('isLoaded', true);
-			} else {
-				result.pushObject({error:"Oops! No Trains matching these routes found. :("});
-			}
-			return result;
-		})*/;
+		});
 	}
 });
 
@@ -193,21 +222,6 @@ Ticketing.TrainInfo = Ember.Object.extend({
 Ticketing.TrainInfo.reopenClass({
 	searchTrain: function(source, destination){
 		Parse.initialize("PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1", "Qsel3hgjZWN38i4nPJYuwPkfhKsYvbxSqJ44GmKs");
-/*		var data = Ticketing.TrainInfo.data;
-		for(var i=1;i<data.length;i++){
-		$.ajax({
-			url:'https://api.parse.com/1/classes/TrainObj',
-			data:JSON.stringify(data[i]),
-			contentType:'application/json',
-			type:'POST',
-			headers:{
-				'X-Parse-Application-Id': 'PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1',
-				"X-Parse-REST-API-Key": "xO7JIwnTjsM2eUkPUliLibWsSphE5PVruCvrCM91"
-			}
-		}).done(function(msg){
-			alert(msg);
-		});
-	}*/
 		if(!source || !destination){
 			return {
 				error:"Please enter sufficient Information to search"
