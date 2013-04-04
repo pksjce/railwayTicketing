@@ -99,7 +99,6 @@ Ticketing.BookTicketView = Ember.View.extend({
 		}
 	},
 	showBooking: function(){
-		console.log(this.get('temp'));
 		this.set('toBook', true);
 	}
 });
