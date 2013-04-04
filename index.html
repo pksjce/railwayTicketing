@@ -74,17 +74,31 @@
 						{{result.bookingDate}}
 					</td>
 					<td>
-						{{result.classASeats}}
+						{{view Ticketing.BookTicketView availableBinding="result.classASeats" typeBinding="A"}}
 					</td>
 					<td>
-						{{result.classBSeats}}
+						{{view Ticketing.BookTicketView availableBinding="result.classBSeats" typeBinding="B"}}
 					</td>
 					<td>
-						{{result.classCSeats}}
+						{{view Ticketing.BookTicketView availableBinding="result.classCSeats" typeBinding="C"}}
 					</td>
 				</tr>
 			{{/each}}
 			</table>
+		</script>
+		<script type="text/x-handlebars" id="bookTicket">
+			{{#if view.toBook}}
+				No of tickets:
+				{{view Ember.TextField placeholder="How many?" valueBinding="view.noOfTickets"}}
+				Your name:
+				{{view Ember.TextField placeholder="Name" valueBinding="view.userName"}}
+				Your mobile number:
+				{{view Ember.TextField placeholder="Mobile" valueBinding="view.mobile"}}
+				<button {{action "bookNow" target="view"}}>Book Now </button>
+			{{else}}
+				<div> Available : {{view.available}} </div>
+				<button {{action "showBooking" target="view"}}> Wanna book?</button>
+			{{/if}}
 		</script>
 		<script type="text/x-handlebars" id="result">
 			<div>

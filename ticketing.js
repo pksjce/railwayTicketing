@@ -68,12 +68,54 @@ Ticketing.SearchView = Ember.View.extend({
 	hasResult:false
 });
 Ticketing.BookingsView = Ember.View.extend({
-	templateName: "bookings"
+	templateName: "bookings",
 });
 
-Ticketing.TrainDetail = Ember.Object.extend({});
+Ticketing.BookTicketView = Ember.View.extend({
+	templateName:"bookTicket",
+	toBook:false,
+	bookNow: function(){
+		var noOfTickets = this.get('noOfTickets');
+		var userName = this.get('userName');
+		var mobile = this.get('mobile');
+		if(!noOfTickets || !userName || !mobile){
+			alert("Please give all details");
+
+		} else{
+			var bookingDetails = {
+				noOfTickets: noOfTickets,
+				userName:userName,
+				mobile: mobile
+			}
+			Ticketing.BookingDetails.saveBooking(bookingDetails);
+			Ticketing.TrainDetail.updateAvailability(this.get('available') -1);
+			this.set('toBook', false);
+		}
+		
+	},
+	showBooking: function(){
+		this.set('toBook', true);
+	}
+});
+
+Ticketing.BookingDetails = Ember.Object.extend({
+
+});
+
+Ticketing.BookingDetails.reopenClass({
+	saveBooking: function(bookingDetails){
+		console.log("I will save " + bookingDetails);
+	},
+});
+
+Ticketing.TrainDetail = Ember.Object.extend({
+
+});
 
 Ticketing.TrainDetail.reopenClass({
+	updateAvailability: function(availability){
+		console.log('I will update availability' +  availability);
+	},
 	find: function(id){
 		Parse.initialize("PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1", "Qsel3hgjZWN38i4nPJYuwPkfhKsYvbxSqJ44GmKs");
 		var query = encodeURIComponent('where={"trainId":' + id + '}');
