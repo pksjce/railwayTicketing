@@ -102,8 +102,8 @@ Ticketing.BookingsView = Ember.View.extend({
 		})
 	},
 	showAll: function(){
-		this.get('childViews').every(function(child, index, self){
-			var elementId = child.get('elementId');
+		this.get('childViews').forEach(function(item, index){
+			var elementId = item.get('elementId');
 			$('#' + elementId).next().css('display', '');
 		});
 	}
