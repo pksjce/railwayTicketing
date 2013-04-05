@@ -18,7 +18,7 @@ Valid search queries -
 	
 	Source = Bangalore, Destination = Mysore/Pune/Chennai(one of these)
 
-Know Issues
+Known Issues
 ===========
 
 1. Page refresh requires login

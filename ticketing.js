@@ -9,6 +9,11 @@ Ticketing.Router.map(function(){
 });
 
 Ticketing.LoginRoute = Ember.Route.extend({
+	setupController: function(controller, model){
+		if(controller.get('isUserLoggedIn')){
+			controller.transitionToRoute('search');
+		}
+	}
 });
 
 Ticketing.LoginController = Ember.ObjectController.extend({
