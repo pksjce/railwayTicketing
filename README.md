@@ -10,6 +10,19 @@ Ex: python -m SimpleHTTPServer 3000
 
 Go to http://localhost:3000
 
+Login details -
+	Username - admin
+	Password - admin
+
+Valid search queries - 
+	
+	Source = Bangalore, Destination = Mysore/Pune/Chennai(one of these)
+
+Know Issues
+===========
+
+1. Page refresh requires login
+2. Modal dialog not good when scrolled down
 
 MIT License
 ===========
