@@ -70,18 +70,24 @@
 					{{/if}}
 				</div>
 			</div>
+		{{/if}}
 		</script>
 		<script type="text/x-handlebars" id="bookings">
 			{{#if controllers.login.isUserLoggedIn}}
+			<div class="span8 offset2">
+				<div class = "span12" style="text-align:left; font-size:20px">
+					Showing booking details for Train no: 
+					{{#withFirst model.trainDetails}}
+						{{log this}}
+					{{/withFirst}}
+				</div>
+			</div>
 			<div class="trainList">	
 				<div class="row-fluid" style="text-align:center">
-					<div class="span1 offset2">
-						Train No
-					</div>
-					<div class="span1">
+					<div class="span3 offset1">
 						Date
 					</div>
-					<div class="span3 offset1">
+					<div class="span5 offset1">
 						Seat Availability
 					</div>
 				</div>
@@ -92,23 +98,22 @@
 			{{/if}}
 		</script>
 		<script type="text/x-handlebars" id="perTrain">
-				<tr>
-					<td>
-						{{result.trainId}}
-					</td>
-					<td>
-						{{result.bookingDate}}
-					</td>
-					<td>
-						{{view Ticketing.BookTicketView availableBinding="result.classASeats" type="A" trainBinding="result"}}
-					
-					
-						{{view Ticketing.BookTicketView availableBinding="result.classBSeats" type="B" trainBinding="result"}}
-					
-					
-						{{view Ticketing.BookTicketView availableBinding="result.classCSeats" type="C" trainBinding="result"}}
-					</td>
-				</tr>		
+				<div class="row-fluid">
+					<div class="span8 offset2" style="text-align:center;border:1px solid grey;background-color:lightgoldenrodyellow;margin-bottom:15px">	
+						<div class="span3 offset1">
+							{{result.bookingDate}}
+						</div>
+						<div class="span5 offset1">
+							{{view Ticketing.BookTicketView availableBinding="result.classASeats" type="A" trainBinding="result"}}
+						
+						
+							{{view Ticketing.BookTicketView availableBinding="result.classBSeats" type="B" trainBinding="result"}}
+						
+						
+							{{view Ticketing.BookTicketView availableBinding="result.classCSeats" type="C" trainBinding="result"}}
+						</div>
+					</div>
+				</div>			
 		</script>
 		<script type="text/x-handlebars" id="bookTicket">
 			{{#if view.toBook}}
