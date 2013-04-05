@@ -41,6 +41,7 @@
 		</div>
 		</script>
 		<script type="text/x-handlebars" id="search">
+		{{#if controllers.login.isUserLoggedIn}}
 			<div id="searchPage row">
 				<div class="searchBar span12">
 					Source:
@@ -71,33 +72,34 @@
 			</div>
 		</script>
 		<script type="text/x-handlebars" id="bookings">
-			<div class="trainList">	
-				<div class="row-fluid" style="text-align:center">
-					<div class="span1 offset2">
-						Train No
-					</div>
-					<div class="span1">
-						Date
-					</div>
-					<div class="span3 offset1">
-						Seat Availability
-					</div>
-				</div>
+			<div class="trainList">
+				<table>
+					<tr>
+						<th>
+							Train Name
+						</th>
+						<th>
+							Date
+						</th>
+						<th>
+							Seat Availability
+						</th>
+					</tr>
 				{{#each result in model.trainDetails}}
 					{{view Ticketing.PerTrainView resultBinding="result"}}
 				{{/each}}
+				</table>
 			</div>
 		</script>
 		<script type="text/x-handlebars" id="perTrain">
-				<br>
-				<div class="row-fluid" style="text-align:center">
-					<div class="span1 offset2"
+				<tr>
+					<td>
 						{{result.trainId}}
-					</div>
-					<div class="span1">
+					</td>
+					<td>
 						{{result.bookingDate}}
-					</div>
-					<div class="span3 offset1">
+					</td>
+					<td>
 						{{view Ticketing.BookTicketView availableBinding="result.classASeats" type="A" trainBinding="result"}}
 					
 					
@@ -105,8 +107,8 @@
 					
 					
 						{{view Ticketing.BookTicketView availableBinding="result.classCSeats" type="C" trainBinding="result"}}
-					</div>
-				</div>		
+					</td>
+				</tr>		
 		</script>
 		<script type="text/x-handlebars" id="bookTicket">
 			{{#if view.toBook}}
@@ -141,7 +143,7 @@
 				</div>
 			{{else}}
 				<div> Class{{view.type}} : {{view.available}}  
-					<button {{action "showBooking" target="view"}}> Book now</button>
+					<button {{action "showBooking" target="view"}}> Wanna book?</button>
 				</div>
 			{{/if}}
 		</script>
