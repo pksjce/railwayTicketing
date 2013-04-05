@@ -72,24 +72,24 @@
 			</div>
 		</script>
 		<script type="text/x-handlebars" id="bookings">
-			<div class="trainList">
-				<table>
-					<tr>
-						<th>
-							Train Name
-						</th>
-						<th>
-							Date
-						</th>
-						<th>
-							Seat Availability
-						</th>
-					</tr>
+			{{#if controllers.login.isUserLoggedIn}}
+			<div class="trainList">	
+				<div class="row-fluid" style="text-align:center">
+					<div class="span1 offset2">
+						Train No
+					</div>
+					<div class="span1">
+						Date
+					</div>
+					<div class="span3 offset1">
+						Seat Availability
+					</div>
+				</div>
 				{{#each result in model.trainDetails}}
 					{{view Ticketing.PerTrainView resultBinding="result"}}
 				{{/each}}
-				</table>
 			</div>
+			{{/if}}
 		</script>
 		<script type="text/x-handlebars" id="perTrain">
 				<tr>
