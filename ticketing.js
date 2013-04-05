@@ -8,8 +8,11 @@ Ticketing.Router.map(function(){
 	this.route('search');
 });
 
+Ticketing.LoginRoute = Ember.Route.extend({
+});
+
 Ticketing.LoginController = Ember.ObjectController.extend({
-	isLogin: false,
+	isUserLoggedIn: false,
 	username: "",
 	password: "",
 	loginFail: false,
@@ -29,7 +32,7 @@ Ticketing.LoginController = Ember.ObjectController.extend({
 					self.set('errorMsg', "Invalid Credentials");
 				} else if(resp.username === user){
 					self.set('loginFail', false);
-					self.set('isLogin', true);
+					self.set('isUserLoggedIn', true);
 					self.transitionToRoute('search');
 				}
 			});
@@ -42,7 +45,16 @@ Ticketing.LoginController = Ember.ObjectController.extend({
 	}
 });
 
+Ticketing.SearchRoute = Ember.Route.extend({
+	setupController: function(controller, model){
+		if(!this.controllerFor('login').get('isUserLoggedIn')){
+			controller.transitionToRoute('login');
+		}
+	}
+});
+
 Ticketing.SearchController = Ember.ObjectController.extend({
+	needs: 'login',
 	hasResult:false,
 	source:"",
 	destination:"",
@@ -74,6 +86,7 @@ Ticketing.SearchController = Ember.ObjectController.extend({
 });
 
 Ticketing.BookingsController = Ember.Controller.extend({
+	needs: 'login',
 	bookingDone:false,
 	updateModel:function(id){
 		var that = this;
@@ -107,19 +120,22 @@ Ticketing.BookingsController = Ember.Controller.extend({
 		var self = this;
 		Ticketing.TrainDetail.updateAvailability(object, type)
 			.then(function(){
-				self.set('bookingDone', true)
+				self.set('bookingDone', true);
 			});
 	}
 });
 
 Ticketing.BookingsRoute = Ember.Route.extend({
 	setupController: function(controller, model){
-		console.log(model);
-		if(typeof model === 'object'){
-			model = model.id;
+		if(!this.controllerFor('login').get('isUserLoggedIn')){
+			controller.transitionToRoute('login');
+		} else{
+			if(typeof model === 'object'){
+				model = model.id;
+			}
+			controller.updateModel(model);
 		}
-		controller.updateModel(model);
-	},
+	}
 });
 
 Ticketing.SearchView = Ember.View.extend({

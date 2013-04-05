@@ -41,6 +41,7 @@
 		</div>
 		</script>
 		<script type="text/x-handlebars" id="search">
+		{{#if controllers.login.isUserLoggedIn}}
 			<div id="searchPage row">
 				<div class="searchBar span12">
 					Source:
@@ -69,8 +70,10 @@
 					{{/if}}
 				</div>
 			</div>
+		{{/if}}
 		</script>
 		<script type="text/x-handlebars" id="bookings">
+		{{#if controllers.login.isUserLoggedIn}}
 			<div class="trainList">
 				<table>
 					<tr>
@@ -89,6 +92,7 @@
 				{{/each}}
 				</table>
 			</div>
+		{{/if}}
 		</script>
 		<script type="text/x-handlebars" id="perTrain">
 				<tr>
