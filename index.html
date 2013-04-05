@@ -102,13 +102,15 @@
 							{{result.bookingDate}}
 						</div>
 						<div class="span5 offset1">
+							<div class="availability">
 							{{view Ticketing.BookTicketView availableBinding="result.classASeats" type="A" trainBinding="result"}}
-						
-						
+							</div>
+							<div class="availability">
 							{{view Ticketing.BookTicketView availableBinding="result.classBSeats" type="B" trainBinding="result"}}
-						
-						
+							</div>
+							<div class="availability">
 							{{view Ticketing.BookTicketView availableBinding="result.classCSeats" type="C" trainBinding="result"}}
+							</div>
 						</div>
 					</div>
 				</div>			

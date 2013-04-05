@@ -69,12 +69,12 @@ input[type="password"] {
     padding:10px;
     border:1px solid white;
 }
-.trainList{
-    height:400px;
-}
 .black{
   color:black;
 }
 .blue{
   color:blue;
+}
+.availability{
+  margin-bottom:5px;
 }
