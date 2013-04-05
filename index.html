@@ -77,14 +77,12 @@
 			<div class="span8 offset2">
 				<div class = "span12" style="text-align:left; font-size:20px">
 					Showing booking details for Train no: 
-					{{#withFirst model.trainDetails}}
-						{{log this}}
-					{{/withFirst}}
+					{{controller.trainId}}
 				</div>
 			</div>
 			<div class="trainList">	
 				<div class="row-fluid" style="text-align:center">
-					<div class="span3 offset1">
+					<div class="span3 offset1" style="text-align:center">
 						Date
 					</div>
 					<div class="span5 offset1">
@@ -124,7 +122,10 @@
     				<div class="vertical-offset">
         				<div class="myBox">
 	        				{{#if view.bookingSuccess}}
-	        					Your booking was successful. Here is your booking id {{view.bookingId}}
+	        					Your booking was successful. 
+	        					<br>
+	        					Here is your booking id {{view.bookingId}}
+	        					<br>
 	        					<button {{action "responseDone" target="view"}}>Great! </button>
 	        				{{else}}	
 	        					Train No {{view.train.trainId}} - Class {{view.type}} Seats for {{view.train.bookingDate}}
@@ -147,8 +148,8 @@
     				</div>
 				</div>
 			{{else}}
-				<div> Class{{view.type}} : {{view.available}}  
-					<button {{action "showBooking" target="view"}}> Wanna book?</button>
+				<div {{bindAttr class="view.color"}}> Class{{view.type}} : {{view.available}}  
+					<button {{action "showBooking" target="view"}}> Book now </button>
 				</div>
 			{{/if}}
 		</script>

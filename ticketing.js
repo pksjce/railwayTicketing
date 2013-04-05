@@ -133,6 +133,7 @@ Ticketing.BookingsRoute = Ember.Route.extend({
 			if(typeof model === 'object'){
 				model = model.id;
 			}
+			controller.set('trainId', model);
 			controller.updateModel(model);
 		}
 	}
@@ -145,20 +146,6 @@ Ticketing.SearchView = Ember.View.extend({
 
 Ticketing.BookingsView = Ember.View.extend({
 	templateName: "bookings",
-	showChildOnly: function(childId){
-		this.get('childViews').forEach(function(item, index){
-			var elementId = item.get('elementId');
-			if(elementId != childId){
-				$('#' + elementId).next().css('display', 'none');
-			}
-		});
-	},
-	showAll: function(){
-		this.get('childViews').forEach(function(item, index){
-			var elementId = item.get('elementId');
-			$('#' + elementId).next().css('display', '');
-		});
-	}
 
 });
 
@@ -169,6 +156,7 @@ Ticketing.PerTrainView = Ember.View.extend({
 Ticketing.BookTicketView = Ember.View.extend({
 	templateName:"bookTicket",
 	toBook:false,
+	color:'black',
 	bookNow: function(){
 		var noOfTickets = this.get('noOfTickets');
 		var userName = this.get('userName');
@@ -195,6 +183,7 @@ Ticketing.BookTicketView = Ember.View.extend({
 				self.get('train').set('class'+type+'Seats', newAvailable);
 				self.set('bookingSuccess', true);
 				self.set('bookingId', response.objectId);
+				self.set('color', 'blue');
 			});
 			
 /*			var parent = this.get('parentView');

@@ -63,7 +63,7 @@ input[type="password"] {
     position:absolute;
     z-index:40002;
     top:30%;
-    left:40%;
+    left:35%;
     margin:0 auto;
     background-color:white;
     padding:10px;
@@ -71,4 +71,10 @@ input[type="password"] {
 }
 .trainList{
     height:400px;
+}
+.black{
+  color:black;
+}
+.blue{
+  color:blue;
 }
