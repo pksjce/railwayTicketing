@@ -3,7 +3,8 @@ header {
    background-color: rgb(236, 233, 233);
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="password"] {
    height: 30px;
    vertical-align: top;
 }
@@ -22,7 +23,7 @@ input[type="text"] {
 
 .title {
    position: fixed;
-   top: 0px;
+   top: 0;
    left: 5px;
    z-index: 2000;
 }

@@ -3,8 +3,43 @@ Ticketing = Ember.Application.create({
 });
 
 Ticketing.Router.map(function(){
+	this.route('login', {path: '/'});
 	this.route('bookings', {path: '/bookings/:id'});
-	this.route('search', {path: '/'});
+	this.route('search');
+});
+
+Ticketing.LoginController = Ember.ObjectController.extend({
+	isLogin: false,
+	username: "",
+	password: "",
+	loginFail: false,
+	errorMsg: "",
+	loginUser: function(){
+		this.set('loginFail', false);
+		var user = this.get('username');
+		var pass = this.get('password');
+		var self = this;
+		if(!user || !pass){
+			this.set('loginFail', true);
+			this.set('errorMsg', "Empty Credentials");
+		} else {
+			Ticketing.LoginModel.login(user, pass).always(function(resp, textStatus, jqXHR){
+				if(textStatus === "error" && resp.status === 404){
+					self.set('loginFail', true);
+					self.set('errorMsg', "Invalid Credentials");
+				} else if(resp.username === user){
+					self.set('loginFail', false);
+					self.set('isLogin', true);
+					self.transitionToRoute('search');
+				}
+			});
+		}
+	},
+	clearFields: function(){
+		this.set('loginFail', false);
+		this.set('username', "");
+		this.set('password', "");
+	}
 });
 
 Ticketing.SearchController = Ember.ObjectController.extend({
@@ -100,7 +135,7 @@ Ticketing.BookingsView = Ember.View.extend({
 			if(elementId != childId){
 				$('#' + elementId).next().css('display', 'none');
 			}
-		})
+		});
 	},
 	showAll: function(){
 		this.get('childViews').forEach(function(item, index){
@@ -112,9 +147,8 @@ Ticketing.BookingsView = Ember.View.extend({
 });
 
 Ticketing.PerTrainView = Ember.View.extend({
-	templateName: "perTrain",
-
-})
+	templateName: "perTrain"
+});
 
 Ticketing.BookTicketView = Ember.View.extend({
 	templateName:"bookTicket",
@@ -236,6 +270,27 @@ Ticketing.TrainInfo.reopenClass({
 		}
 		var query = encodeURIComponent('where={"source":"' + source + '", "destination": "' + destination +'"}');
 		var getUrl = 'https://api.parse.com/1/classes/TrainObj?' + query;
+		return $.ajax({
+			url:getUrl,
+			contentType:'application/json',
+			type:'GET',
+			headers:{
+				'X-Parse-Application-Id': 'PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1',
+				"X-Parse-REST-API-Key": "xO7JIwnTjsM2eUkPUliLibWsSphE5PVruCvrCM91"
+			}
+		});
+	}
+});
+
+Ticketing.LoginModel = Ember.Object.extend({
+});
+
+Ticketing.LoginModel.reopenClass({
+	login: function(user, pass){
+		Parse.initialize("PIksQ4FqeL44m0lylmj3Lj3N48zTuSNNFSSED7g1", "Qsel3hgjZWN38i4nPJYuwPkfhKsYvbxSqJ44GmKs");
+		var username = encodeURIComponent(user);
+		var password = encodeURIComponent(pass);
+		var getUrl = 'https://api.parse.com/1/login?username=' + username + '&password='+password;
 		return $.ajax({
 			url:getUrl,
 			contentType:'application/json',

@@ -22,6 +22,24 @@
 		<script type="text/x-handlebars">
 			{{outlet}}
 		</script>
+		<script type="text/x-handlebars" id="login">
+		<div class="span12">
+			{{#if loginFail}}
+				<div class="span11 alert alert-error">
+	              <button type="button" class="close" data-dismiss="alert">&times;</button>
+	              <strong>Oops!</strong> {{errorMsg}}
+	            </div>
+			{{/if}}
+			Username:
+			{{view Ember.TextField placeholder="Username" valueBinding="controller.username"}}
+			<br>
+			Password:
+			{{view Ember.TextField placeholder="Password" valueBinding="controller.password" type="password"}}
+			<br>
+			<button {{action 'loginUser'}} class="btn btn-primary"> Login </button>
+			<button {{action 'clearFields'}} class="btn"> Reset </button>
+		</div>
+		</script>
 		<script type="text/x-handlebars" id="search">
 			<div id="searchPage row">
 				<div class="searchBar span12">
