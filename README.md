@@ -24,7 +24,7 @@ Working Application(Video)
 
 http://www.youtube.com/watch?v=pEcer2d6vj4&feature=youtu.be
 
-Know Issues
+Known Issues
 ===========
 
 1. Page refresh requires login
