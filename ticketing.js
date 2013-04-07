@@ -9,6 +9,10 @@ Ticketing.Router.map(function(){
 });
 
 Ticketing.LoginRoute = Ember.Route.extend({
+	setupController: function(controller, model){
+		//TODO: Should redirect to search route if user is already logged in. 
+	}
+	
 });
 
 Ticketing.LoginController = Ember.ObjectController.extend({
@@ -110,9 +114,7 @@ Ticketing.BookingsController = Ember.Controller.extend({
 					});
 				})
 				trainDetails.set('isLoaded', true);
-			} else {
-				trainDetails.pushObject({error:"Oops! No Trains matching these routes found. :("});
-			}
+			} ;
 			that.set('content', {'trainDetails': trainDetails});
 		});
 	},

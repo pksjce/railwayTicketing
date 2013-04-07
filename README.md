@@ -17,6 +17,12 @@ Login details -
 Valid search queries - 
 	
 	Source = Bangalore, Destination = Mysore/Pune/Chennai(one of these)
+	All values are case sensitive
+
+Working Application(Video)
+==========================
+
+http://www.youtube.com/watch?v=pEcer2d6vj4&feature=youtu.be
 
 Know Issues
 ===========
