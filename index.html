@@ -14,17 +14,23 @@
 		<title>Railway Ticketing System</title>
 	</head>
 	<body>
-		<header class="navbar-fixed-top">
-		</header>
+
 		<h2 class="title"><img src="train.png"> Railway Ticketing System</h2>
 		<div id="mainPage" class="container bodyArea">
+
 		</div>
-		<script type="text/x-handlebars">
+
+		<script type="text/x-handlebars" id="application">
+		   <header class="navbar-fixed-top">
+			<button class="btn-logout" {{action 'logout' }} >logout</button>
+		    </header>
+
 			{{outlet}}
+
 		</script>
+
 		<script type="text/x-handlebars" id="login">
-		{{#if isUserLoggedIn}}
-		{{else}}
+		{{#unless controllers.login.isUserLoggedIn}}
 			<div class="span12">
 				{{#if loginFail}}
 					<div class="span11 alert alert-error">
@@ -41,8 +47,9 @@
 				<button {{action 'loginUser'}} class="btn btn-primary"> Login </button>
 				<button {{action 'clearFields'}} class="btn"> Reset </button>
 			</div>
-		{{/if}}
+		{{/unless}}
 		</script>
+
 		<script type="text/x-handlebars" id="search">
 		{{#if controllers.login.isUserLoggedIn}}
 			<div id="searchPage row">

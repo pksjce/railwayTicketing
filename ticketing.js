@@ -8,9 +8,22 @@ Ticketing.Router.map(function(){
 	this.route('search');
 });
 
+Ticketing.ApplicationRoute = Ember.Route.extend({
+	
+	events: {
+		logout:function(){
+			delete localStorage.sessionToken;
+			this.get("controller").transitionToRoute('login');
+		}
+	}
+});
+
 Ticketing.LoginRoute = Ember.Route.extend({
 	setupController: function(controller, model){
 		//TODO: Should redirect to search route if user is already logged in. 
+		if(this.controllerFor('login').getSessionToken()){
+			controller.transitionToRoute('search');
+		}
 	}
 	
 });
@@ -21,6 +34,23 @@ Ticketing.LoginController = Ember.ObjectController.extend({
 	password: "",
 	loginFail: false,
 	errorMsg: "",
+
+	setLoggedIn:function(sessionToken){
+		localStorage.sessionToken = sessionToken;
+	},
+
+	getSessionToken:function(){
+		return localStorage.sessionToken;
+	},
+
+	isUserLoggedIn:function(){
+		if(this.getSessionToken())
+			return true;
+
+		return false;
+
+	},
+
 	loginUser: function(){
 		this.set('loginFail', false);
 		var user = this.get('username');
@@ -36,6 +66,7 @@ Ticketing.LoginController = Ember.ObjectController.extend({
 					self.set('errorMsg', "Invalid Credentials");
 				} else if(resp.username === user){
 					self.set('loginFail', false);
+					self.setLoggedIn(resp.sessionToken);
 					self.set('isUserLoggedIn', true);
 					self.transitionToRoute('search');
 				}
@@ -51,7 +82,7 @@ Ticketing.LoginController = Ember.ObjectController.extend({
 
 Ticketing.SearchRoute = Ember.Route.extend({
 	setupController: function(controller, model){
-		if(!this.controllerFor('login').get('isUserLoggedIn')){
+		if(!this.controllerFor('login').getSessionToken()){
 			controller.transitionToRoute('login');
 		}
 	}
@@ -129,7 +160,7 @@ Ticketing.BookingsController = Ember.Controller.extend({
 
 Ticketing.BookingsRoute = Ember.Route.extend({
 	setupController: function(controller, model){
-		if(!this.controllerFor('login').get('isUserLoggedIn')){
+		if(!this.controllerFor('login').getSessionToken() ){
 			controller.transitionToRoute('login');
 		} else{
 			if(typeof model === 'object'){
